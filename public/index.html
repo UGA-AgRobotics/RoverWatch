@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rover Watch</title>
+
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+
+  <div class="container">
+    <div class="jumbotron text-center">
+      <h1>Rover Watch</h1>
+    </div>
+  </div>
+
+  <div class="container full-stretch">
+    <div class="row full-stretch">
+
+      <!-- Google Map Canvas Div -->
+      <div class="col-md-6 full-stretch">
+        <div id="map-canvas"></div>
+      </div>
+
+      <!-- Single lat/lon plot controls -->
+      <div class="col-md-6">
+        <label><b>Plot single lat/lon:</b></label><br>
+        <input type="number" placeholder="latitude" id="textbox-lat" value="31.473600">
+        <input type="number" placeholder="longitude" id="textbox-lon" value="-83.529900">
+        <button type="button" class="btn btn-info" id="btn-plot">Plot</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+  <script src="bower_components/socket.io-client/dist/socket.io.js"></script>
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="main.js"></script>
+
+</body>
+</html>

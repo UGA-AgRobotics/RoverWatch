@@ -1,0 +1,22 @@
+/********************************************
+Main CSS styling file.
+Any additional CSS files can be import here
+*********************************************/
+
+html, body {
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+#map-canvas {
+	height: 80%;
+	width: 100%;
+	margin: 10px;
+}
+#user-controls {
+	float: right;
+}
+.full-stretch {
+	height: 100%;
+	width: 100%;
+}
