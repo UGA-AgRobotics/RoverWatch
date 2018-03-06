@@ -18,6 +18,7 @@ var path = require('path');
 app.use(express.static('public'));  // set Express to use "public" folder for js/css/html content
 // app.use('/scripts', express.static(path.join(__dirname + 'node_modules/')));
 app.use('/bower_components', express.static(path.join(__dirname + '/bower_components')));
+app.use('/node_modules/roslib', express.static(path.join(__dirname + '/node_modules/roslib')));
 
 
 // +++++ Routes: +++++
