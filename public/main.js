@@ -109,7 +109,7 @@ var s, ROSWebSocketHandler = {
 
 	init: function () {
 
-		gmapObj = Object.create(GmapHandler);  // initialize gmap hanlder for adding points
+		ROSWebSocketHandler.gmapObj = Object.create(GmapHandler);  // initialize gmap hanlder for adding points
 
 		s = this.settings;
 		s.ros_obj = new ROSLIB.Ros({ url: s.ws_url });
