@@ -19,6 +19,7 @@ app.use(express.static('public'));  // set Express to use "public" folder for js
 // app.use('/scripts', express.static(path.join(__dirname + 'node_modules/')));
 app.use('/bower_components', express.static(path.join(__dirname + '/bower_components')));
 app.use('/node_modules/roslib', express.static(path.join(__dirname + '/node_modules/roslib')));
+app.use('/node_modules/eventemitter2', express.static(path.join(__dirname + '/node_modules/eventemitter2')));
 
 
 // +++++ Routes: +++++
@@ -28,7 +29,6 @@ app.get('/', function(req, res) {
 	res.sendFile(path.join(__dirname + '/public/html/index.html'));
 
 });
-
 // app.get('/:project', function (req, res) {
 // 	var project = req.params.project;
 // 	res.render(project, projects_obj[project]);
