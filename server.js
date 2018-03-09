@@ -6,7 +6,7 @@ var Config = require('./config'),
 // +++++ Packages: +++++
 var express    = require('express'); // call express
 var app        = express(); // define our app using express
-var server = app.listen(config.NODEJS_PORT, config.NODEJS_IP); // attempting to host on LAN
+var server = app.listen(config.NODEJS_PORT, config.NODEJS_HOST); // attempting to host on LAN
 var io = require('socket.io').listen(server);
 var path = require('path');
 // +++++++++++++++++++++
@@ -46,4 +46,4 @@ app.get('/', function(req, res) {
 // +++++++++++++++++++++++++
 
 
-console.log('>>> Access page at: http://' + config.NODEJS_IP + ':' + config.NODEJS_PORT)
+console.log('>>> Access page at: http://' + config.NODEJS_HOST + ':' + config.NODEJS_PORT)

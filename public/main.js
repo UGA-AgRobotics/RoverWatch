@@ -58,15 +58,15 @@ var GmapHandler = {
 
 	},
 
-	addMarkerToMap: function (lat, lon, htmlMarkupForInfoWindow) {
+	addMarkerToMap: function (lat, lon, htmlMarkupForInfoWindow, pointColor='purple') {
 
 		var infowindow = new google.maps.InfoWindow();
 	  var myLatLng = new google.maps.LatLng(lat, lon);
 
 	  // From RRA google_map_dragdrop_geojson.html..
 	  var marker = new google.maps.Circle({
-	    strokeColor: GmapHandler.pointColorRover,
-	    fillColor: GmapHandler.pointColorRover,
+	    strokeColor: pointColor,
+	    fillColor: pointColor,
 	    map: GmapHandler.map,
 	    center: myLatLng,
 	    radius: 0.1,
@@ -97,12 +97,17 @@ var GmapHandler = {
 var s, ROSWebSocketHandler = {
 
 	settings: {
-		ws_url: 'ws://localhost:9090',
+		// ws_url: 'ws://localhost:9090',
+		ws_url: 'ws://192.168.131.103:9090',
 		ros_obj: null,
 		latTextbox: $('#textbox-lat'),
 		lonTextbox: $('#textbox-lon'),
 		currLatTextbox: $('#textbox-curr-lat'),
 		currLonTextbox: $('#textbox-curr-lon'),
+		goalLatTextbox: $('#textbox-goal-lat'),
+		goalLonTextbox: $('#textbox-goal-lon'),
+		goalList: $('#list-goals'),
+		goalButton: $('#btn-goal')
 	},
 
 	gmapObj: null,
@@ -127,10 +132,24 @@ var s, ROSWebSocketHandler = {
 	},
 
 	setup: function () {
-
-		// -------------------
+		// ++++++++++++++++++++
 		// Binding UI events:
-		// -------------------
+		// ++++++++++++++++++++
+
+
+		// Goal Position UI Events:
+		// ++++++++++++++++++++++++++
+		s.goalButton.on('click', function () {
+
+			let _lat = s.goalLatTextbox.val();  // get lat value for goal
+			let _lon = s.goalLonTextbox.val();  // get lon value for goal
+			
+			ROSWebSocketHandler.addGoalToList(_lat, _lon);  // Adds lat/lon from goal lat/lon textboxes to the goals list
+
+			ROSWebSocketHandler.gmapObj.addMarkerToMap(_lat, _lon, '', ROSWebSocketHandler.gmapObj.pointColorFlags);  // Use Gmap Handler to add lat/lon to map
+
+		});
+
 
 		// ROS Client Events:
 		// ++++++++++++++++++++++++++
@@ -146,6 +165,7 @@ var s, ROSWebSocketHandler = {
 	    console.log('Connection to websocket server closed.');
 	  }),
 
+
 	  // ROS subscriber to /listener topic:
 	  // +++++++++++++++++++++++++++++++++++++
 	  s.testListener.subscribe(function(message) {
@@ -160,6 +180,7 @@ var s, ROSWebSocketHandler = {
 
 	  });
 
+
 	  // ROS publisher to /cmd_vel topic:
 	  // +++++++++++++++++++++++++++++++++++
 
@@ -168,17 +189,27 @@ var s, ROSWebSocketHandler = {
 	},
 
 	handleFixData: function (message) {
+		// ++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Handles incoming fix data from /navsat/fix topic.
+		// ++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		if (message.latitude == null || message.longitude == null) { return; }
 
 		s.currLatTextbox.val(message.latitude);  // Display current lat in textbox
 		s.currLonTextbox.val(message.longitude);  // Display current lon in textbox
 
-		ROSWebSocketHandler.gmapObj.addMarkerToMap(message.latitude, message.longitude);
+		ROSWebSocketHandler.gmapObj.addMarkerToMap(message.latitude, message.longitude, '', ROSWebSocketHandler.gmapObj.pointColorRover);
 
-	}
+	},
 
+	addGoalToList: function (lat, lon) {
+		// ++++++++++++++++++++++++++++++++++++++++++
+		// Adds goal lat/lon to goals list
+		// ++++++++++++++++++++++++++++++++++++++++++
+
+		s.goalList.append('<li class="list-group-item">' + lat + ', ' + lon + '</li>');  // Add goal lat/lon to goals list
+
+	},
 
 
 };
