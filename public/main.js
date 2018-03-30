@@ -126,7 +126,7 @@ var s, ROSWebSocketHandler = {
 	  });
 	  s.fixListener = new ROSLIB.Topic({
 	  	ros: s.ros_obj,
-	  	name: '/navsat/fix',
+	  	name: '/fix',
 	  	messageType: 'sensor_msgs/NavSatFix'
 	  });
 	  s.gotoFlagPublisher = new ROSLIB.Topic({
