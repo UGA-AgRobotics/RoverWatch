@@ -110,7 +110,8 @@ var s, ROSWebSocketHandler = {
 
 	settings: {
 		// ws_url: 'ws://localhost:9090',
-		ws_url: 'ws://192.168.131.103:9090',
+		// ws_url: 'ws://192.168.131.103:9090',
+		ws_url: 'ws://192.168.131.11:9090',  // Jackal's IP
 		ros_obj: null,
 		latTextbox: $('#textbox-lat'),
 		lonTextbox: $('#textbox-lon'),
@@ -137,10 +138,17 @@ var s, ROSWebSocketHandler = {
 	  });
 	  s.fixListener = new ROSLIB.Topic({
 	  	ros: s.ros_obj,
-	  	name: '/navsat/fix',
+	  	name: '/fix',
 	  	messageType: 'sensor_msgs/NavSatFix'
 	  });
+	  s.gotoFlagPublisher = new ROSLIB.Topic({
+	  	ros: s.ros_obj,
+	  	name: '/toflag',
+	  	messageType: 'std_msgs/Bool'
+	  });
+
 		this.setup();  // run setup function below
+		
 	},
 
 	setup: function () {
@@ -238,6 +246,10 @@ $(document).ready(function () {
 	var _rosWS = Object.create(ROSWebSocketHandler);
 	_rosWS.init();
 
+	// Main UI event (TODO: Organize this frontend JS!!)
+	$('#btn-goto-flag').on('click', function () {
+		// When clicked, drive Jackal to the flag's position..
 
+	});
 
 });
