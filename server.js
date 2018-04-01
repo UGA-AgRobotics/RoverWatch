@@ -14,11 +14,14 @@ var path = require('path');
 // var mongoose = require('mongoose');  // MongoDB made easier, if needed (Schemas, etc.)
 // var projects_obj = require('./models/projects'); // Example of importing a JS module
 
+app.use(express.static(path.join(__dirname + '/public/css')));
+app.use(express.static(path.join(__dirname + '/dist')));
+app.use('/css', express.static(path.join(__dirname + '/node_modules/bootstrap/dist/css')));
 
-app.use(express.static('public'));  // set Express to use "public" folder for js/css/html content
-app.use('/roslib', express.static(path.join(__dirname + '/node_modules/roslib')));
-app.use('/eventemitter2', express.static(path.join(__dirname + '/node_modules/eventemitter2')));
-app.use('/node_modules/jquery/dist/jquery.min.js')
+// app.use('/bundle', express.static(path.join(__dirname + '/public/bundle.js')));  // set Express to use "public" folder for js/css/html content
+// app.use('/roslib', express.static(path.join(__dirname + '/node_modules/roslib')));
+// app.use('/eventemitter2', express.static(path.join(__dirname + '/node_modules/eventemitter2')));
+// app.use('/node_modules/jquery/dist/jquery.min.js')
 
 
 // +++++ Routes: +++++
@@ -28,10 +31,6 @@ app.get('/', function(req, res) {
 	res.sendFile(path.join(__dirname + '/public/html/index.html'));
 
 });
-// app.get('/:project', function (req, res) {
-// 	var project = req.params.project;
-// 	res.render(project, projects_obj[project]);
-// });
 // +++++++++++++++++++
 
 
