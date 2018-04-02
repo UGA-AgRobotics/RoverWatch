@@ -25,12 +25,12 @@
     <div class="row full-stretch">
 
       <!-- Google Map Canvas Div -->
-      <div class="col-md-6 full-stretch">
+      <div class="col-md-6 col-xs-12 full-stretch">
         <div id="map-canvas"></div>
       </div>
 
       <!-- UI Controls and stuff -->
-      <div class="col-md-6">
+      <div class="col-md-6 col-xs-12">
 
         <!-- Single lat/lon plot controls -->  
         <!-- <label><b>Plot single lat/lon:</b></label><br> -->
@@ -41,10 +41,21 @@
         <!-- <br><br><br> -->
 
         <!-- Adding a flag/goal UI feature -->
-        <label><b>Add goal position:</b></label><br>
+        <label><b>Add single goal position:</b></label><br>
         <input type="number" placeholder="latitude" id="textbox-goal-lat" value="31.4753776881">
         <input type="number" placeholder="longitude" id="textbox-goal-lon" value="-83.5289577629">
-        <button type="button" class="btn btn-info" id="btn-add-goal">Add</button><br><br>
+        <button type="button" class="btn btn-info" id="btn-add-goal">Add goal</button><br><br>
+
+        <!-- Upload a list of goals -->
+        <label><b>Add list of goals:</b></label><br>
+        <label class="btn btn-info" for="file-upload-goals">
+          <input id="file-upload-goals" type="file" style="display:none">
+          Upload goals
+        </label>
+        <span class='label label-info' id="file-upload-info"></span>
+        
+        <br><br>
+
         <label><b>Goals:</b></label>
         <ul class="list-group" id="list-goals"></ul>
 
@@ -65,11 +76,13 @@
     </div>
   </div>
 
+<!--   <script>
+    $(document).ready(function() {
+      console.log("just testing the '$' in the browser..");
+    });
+  </script> -->
+
   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-  <!-- <script src="bower_components/socket.io-client/dist/socket.io.js"></script> -->
-  <!-- <script src="bower_components/jquery/dist/jquery.min.js"></script> -->
-  <!-- <script src="bower_components/bootstrap/dist/js/bootstrap.bundle.min.js"></script> -->
-  <!-- <script src="main.js"></script> -->
   <script src="bundle.js"></script>
 
 </body>
