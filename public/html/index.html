@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rover Watch</title>
+
+  <!-- <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script> -->
+  <!-- <script type="text/javascript" src="node_modules/eventemitter2/lib/eventemitter2.js"></script> -->
+  <!-- <script type="text/javascript" src="node_modules/roslib/build/roslib.min.js"></script> -->
+
+</head>
+<body>
+
+  <div class="container">
+    <div class="jumbotron text-center">
+      <h1>Rover Watch</h1>
+    </div>
+  </div>
+
+  <div class="container full-stretch">
+    <div class="row full-stretch">
+
+      <!-- Google Map Canvas Div -->
+      <div class="col-md-6 full-stretch">
+        <div id="map-canvas"></div>
+      </div>
+
+      <!-- UI Controls and stuff -->
+      <div class="col-md-6">
+
+        <!-- Single lat/lon plot controls -->  
+        <!-- <label><b>Plot single lat/lon:</b></label><br> -->
+        <!-- <input type="number" placeholder="latitude" id="textbox-lat" value="31.473600"> -->
+        <!-- <input type="number" placeholder="longitude" id="textbox-lon" value="-83.529900"> -->
+        <!-- <button type="button" class="btn btn-info" id="btn-plot">Plot</button> -->
+
+        <!-- <br><br><br> -->
+
+        <!-- Adding a flag/goal UI feature -->
+        <label><b>Add goal position:</b></label><br>
+        <input type="number" placeholder="latitude" id="textbox-goal-lat" value="31.4753776881">
+        <input type="number" placeholder="longitude" id="textbox-goal-lon" value="-83.5289577629">
+        <button type="button" class="btn btn-info" id="btn-add-goal">Add</button><br><br>
+        <label><b>Goals:</b></label>
+        <ul class="list-group" id="list-goals"></ul>
+
+        <br><br>
+
+        <!-- Go to flag button -->
+        <button type="button" class="btn btn-info" id="btn-goto-flag">Go to flag</button>
+
+        <br><br><br>
+
+        <!-- Current GPS position of Rover -->
+        <label><b>Current position:</b></label><br>
+        <input type="number" placeholder="latitude" id="textbox-curr-lat" readonly>
+        <input type="number" placeholder="longitude" id="textbox-curr-lon" readonly>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+  <!-- <script src="bower_components/socket.io-client/dist/socket.io.js"></script> -->
+  <!-- <script src="bower_components/jquery/dist/jquery.min.js"></script> -->
+  <!-- <script src="bower_components/bootstrap/dist/js/bootstrap.bundle.min.js"></script> -->
+  <!-- <script src="main.js"></script> -->
+  <script src="bundle.js"></script>
+
+</body>
+</html>
