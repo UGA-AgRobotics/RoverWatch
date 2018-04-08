@@ -7,8 +7,7 @@ JS module for handling google maps API for Rover Watch.
 
 
 // Module Requirements:
-const
-	$ = require('jquery');
+var $ = require('jquery');
 
 
 

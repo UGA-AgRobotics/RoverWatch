@@ -2,129 +2,156 @@
 
 /*
 Handles websocket events for Rover Watch.
+Websocket server is from rosbridge-suite (http://wiki.ros.org/rosbridge_suite),
+and this module is the client side handling of ROS topics data using
+websocket protocol.
 */
 
 
 
 // Requirements:
-const
-	$ = require('jquery'),
-	roslib = require('roslib'),
-	eventemitter2 = require('eventemitter2'),
-	socketio = require('socket.io-client'),
-	gmapHandler = require('./gmap-handler');
+var $ = require('jquery');
+var roslib = require('roslib');
+var eventemitter2 = require('eventemitter2');
+var socketio = require('socket.io-client');
+	// gmapHandler = require('./gmap-handler');
 
 
 
-module.exports = function(config) {
+var RosConfig = {
 
-	var ROSHandler = {
+	// ROS Websocket Server URL:
+	ROS_WEBSOCKET_URL: process.env.ROS_WEBSOCKET_URL || 'ws://192.168.131.11:9090',  // default: Jackal
 
-		settings: {
-			wsUrl: config.ROS_WEBSOCKET_URL,
-			currLatTextbox: $('#textbox-curr-lat'),
-			currLonTextbox: $('#textbox-curr-lon'),
+	ROS_TOPICS: {
+		ROS_FIX_TOPIC: {
+			name: process.env.ROS_FIX_TOPIC || '/fix',
+			topicType: 'subscriber',
+			messageType: 'sensor_msgs/NavSatFix'
 		},
-
-		rosObj: null,  // ROS event handler
-		gmapObj: null,  // gmaps event handler
-
-		topics: {
-			listener: config.ROS_LISTENER_TOPIC,
-			fix: config.ROS_FIX_TOPIC,
-			toFlag: config.ROS_TOFLAG_TOPIC
+		ROS_LISTENER_TOPIC: {
+			name: process.env.ROS_WEBSOCKET_TOPIC || '/listener',
+			topicType: 'subscriber',
+			messageType: 'std_msgs/String'
 		},
+		ROS_TOFLAG_TOPIC: {
+			name: process.env.ROS_TOFLAG_TOPIC || '/toflag',
+			topicType: 'publisher',
+			messageType: 'std_msgs/Bool'
+		}
+	}
+
+};
 
 
 
-		init: function() {
+// module.exports = function(rosWebsocketUrl, topics) {
 
-			ROSHandler.gmapObj = Object.create(gmapHandler);  // initialize gmap hanlder for adding points
+var ROSHandler = {
 
-			ROSHandler.rosObj = new roslib.Ros({ url: ROSHandler.settings.wsUrl });
+	// wsServerUrl: rosWebsocketUrl,
+		// currLatTextbox: $('#textbox-curr-lat'),
+		// currLonTextbox: $('#textbox-curr-lon'),
 
-			ROSHandler.settings.testListener = new roslib.Topic({
-		    ros : ROSHandler.rosObj,
-		    name: ROSHandler.topics.listener,
-		    messageType : 'std_msgs/String'
-		  });
-		  ROSHandler.settings.fixListener = new roslib.Topic({
-		  	ros: ROSHandler.rosObj,
-		  	name: ROSHandler.topics.fix,
-		  	messageType: 'sensor_msgs/NavSatFix'
-		  });
-		  ROSHandler.settings.gotoFlagPublisher = new roslib.Topic({
-		  	ros: ROSHandler.rosObj,
-		  	name: ROSHandler.topics.toFlag,
-		  	messageType: 'std_msgs/Bool'
-		  });
+	config: RosConfig,
 
-			ROSHandler.setup();  // run setup function below
+	rosObj: null,  // ROS event handler
+	// gmapObj: null,  // gmaps event handler
+	topicObj: {
+		name: null,
+		topicType: null,
+		messageType: null
+	},
 
-		},
+	// topics: topics,
+	topicHandlers: {},
 
 
 
-		setup: function() {
+	init: function() {
 
-			// ++++++++++++++++++++
-			// Binding UI events:
-			// ++++++++++++++++++++
+		// ROSHandler.gmapObj = Object.create(gmapHandler);  // initialize gmap hanlder for adding points
+		ROSHandler.rosObj = new roslib.Ros({ url: RosConfig.ROS_WEBSOCKET_URL });
 
+		for(var topicName in RosConfig.ROS_TOPICS) {
 
-			// ROS Client WS Events:
-			// ++++++++++++++++++++++++++
-			ROSHandler.rosObj.on('connection', function () {
-				console.log("Connected to websocket server..");
-			}),
-			ROSHandler.rosObj.on('error', function (error) {
-		    console.log('Error connecting to websocket server: ', error);
-		  }),
-		  ROSHandler.rosObj.on('close', function () {
-		    console.log('Connection to websocket server closed.');
-		  }),
-
-
-		  // ROS subscriber to /listener topic:
-		  // +++++++++++++++++++++++++++++++++++++
-		  ROSHandler.settings.testListener.subscribe(function(message) {
-		    console.log('Received message on ' + ROSHandler.settings.testListener.name + ': ' + message.data);
-		    // ROSHandler.settings.listener.unsubscribe();
-		  });
-		  ROSHandler.settings.fixListener.subscribe(function(message) {
-		  	console.log("Received message on fixLister: " + message.data);
-		  	ROSHandler.handleFixData(message);
-		  });
-
-
-		  // ROS publisher to /cmd_vel topic:
-		  // +++++++++++++++++++++++++++++++++++
-
-		},
-
-
-
-		handleFixData: function(message) {
-			// ++++++++++++++++++++++++++++++++++++++++++++++++++
-			// Handles incoming fix data from /navsat/fix topic.
-			// ++++++++++++++++++++++++++++++++++++++++++++++++++
-
-			if (message.latitude == null || message.longitude == null) { return; }
-
-			ROSHandler.settings.currLatTextbox.val(message.latitude);  // Display current lat in textbox
-			ROSHandler.settings.currLonTextbox.val(message.longitude);  // Display current lon in textbox
-
-			ROSHandler.gmapObj.addMarkerToMap(message.latitude, message.longitude, '', ROSHandler.gmapObj.pointColorRover);
+			// var topicObj = ROSHandler.topics[topicName];
+			var topicObj = RosConfig.ROS_TOPICS[topicName];
+			
+			// initialize topic handlers using ROS_TOPICS names:
+			ROSHandler.topicHandlers[topicName] = new roslib.Topic({
+				ros: ROSHandler.rosObj,
+				name: topicObj.name,
+				messageType: topicObj.messageType
+			});
 
 		}
 
+		// ROSHandler.setup();  // run setup function below
+
+	},
 
 
-	};
 
-	
+	// setup: function() {
 
-	return ROSHandler;
+	// 	// ++++++++++++++++++++
+	// 	// Event handling
+	// 	// ++++++++++++++++++++
+
+
+	// 	// ROS Client Default WS Events:
+	// 	// ++++++++++++++++++++++++++
+	// 	ROSHandler.rosObj.on('connection', function () {
+	// 		console.log("Connected to websocket server..");
+	// 	}),
+	// 	ROSHandler.rosObj.on('error', function (error) {
+	//     console.log('Error connecting to websocket server: ', error);
+	//   }),
+	//   ROSHandler.rosObj.on('close', function () {
+	//     console.log('Connection to websocket server closed.');
+	//   }),
+
+
+	//   // ROS subscriber to /listener topic:
+	//   // +++++++++++++++++++++++++++++++++++++
+	//   ROSHandler.settings.testListener.subscribe(function(message) {
+	//     console.log('Received message on ' + ROSHandler.settings.testListener.name + ': ' + message.data);
+	//     // ROSHandler.settings.listener.unsubscribe();
+	//   });
+	//   ROSHandler.settings.fixListener.subscribe(function(message) {
+	//   	console.log("Received message on fixLister: " + message.data);
+	//   	ROSHandler.handleFixData(message);
+	//   });
+	// },
+
+
+
+	// handleFixData: function(message) {
+	// 	// ++++++++++++++++++++++++++++++++++++++++++++++++++
+	// 	// Handles incoming fix data from /navsat/fix topic.
+	// 	// ++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	// 	if (message.latitude == null || message.longitude == null) { return; }
+
+	// 	ROSHandler.settings.currLatTextbox.val(message.latitude);  // Display current lat in textbox
+	// 	ROSHandler.settings.currLonTextbox.val(message.longitude);  // Display current lon in textbox
+
+	// 	ROSHandler.gmapObj.addMarkerToMap(message.latitude, message.longitude, '', ROSHandler.gmapObj.pointColorRover);
+
+	// }
+
 
 
 };
+
+	
+
+	// return ROSHandler;
+
+
+// };
+
+
+
+module.exports = ROSHandler;

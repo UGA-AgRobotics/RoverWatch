@@ -1,0 +1,159 @@
+{
+	"date": "04-05-2018",
+	"location": "Engineering Annex",
+	"goals": [
+		{
+			"index": 1,
+			"decLatLon": {
+				"lat": {
+					"deg": 31,
+					"min": 28,
+					"sec": 31.35
+				},
+				"lon": {
+					"deg": -83,
+					"min": 31,
+					"sec": 44.19
+				}
+			},
+			"dsmLatLon": {},
+			"utmPos": {}
+		},
+		{
+			"index": 2,
+			"decLatLon": {
+				"lat": {
+					"deg": 31,
+					"min": 28,
+					"sec": 31.35
+				},
+				"lon": {
+					"deg": -83,
+					"min": 31,
+					"sec": 44.27
+				}
+			},
+			"dsmLatLon": {},
+			"utmPos": {}
+		},
+		{
+			"index": 3,
+			"decLatLon": {
+				"lat": {
+					"deg": 31,
+					"min": 28,
+					"sec": 31.35
+				},
+				"lon": {
+					"deg": -83,
+					"min": 31,
+					"sec": 44.38
+				}
+			},
+			"dsmLatLon": {},
+			"utmPos": {}
+		},
+		{
+			"index": 4,
+			"decLatLon": {
+				"lat": {
+					"deg": 31,
+					"min": 28,
+					"sec": 31.34
+				},
+				"lon": {
+					"deg": -83,
+					"min": 31,
+					"sec": 44.51
+				}
+			},
+			"dsmLatLon": {},
+			"utmPos": {}
+		},
+		{
+			"index": 5,
+			"decLatLon": {
+				"lat": {
+					"deg": 31,
+					"min": 28,
+					"sec": 31.33
+				},
+				"lon": {
+					"deg": -83,
+					"min": 31,
+					"sec": 44.68
+				}
+			},
+			"dsmLatLon": {},
+			"utmPos": {}
+		},
+		{
+			"index": 6,
+			"decLatLon": {
+				"lat": {
+					"deg": 31,
+					"min": 28,
+					"sec": 31.29
+				},
+				"lon": {
+					"deg": -83,
+					"min": 31,
+					"sec": 44.79
+				}
+			},
+			"dsmLatLon": {},
+			"utmPos": {}
+		},
+		{
+			"index": 7,
+			"decLatLon": {
+				"lat": {
+					"deg": 31,
+					"min": 28,
+					"sec": 31.21
+				},
+				"lon": {
+					"deg": -83,
+					"min": 31,
+					"sec": 44.96
+				}
+			},
+			"dsmLatLon": {},
+			"utmPos": {}
+		},
+		{
+			"index": 8,
+			"decLatLon": {
+				"lat": {
+					"deg": 31,
+					"min": 28,
+					"sec": 31.13
+				},
+				"lon": {
+					"deg": -83,
+					"min": 31,
+					"sec": 45.12
+				}
+			},
+			"dsmLatLon": {},
+			"utmPos": {}
+		},
+		{
+			"index": 9,
+			"decLatLon": {
+				"lat": {
+					"deg": 31,
+					"min": 28,
+					"sec": 31.05
+				},
+				"lon": {
+					"deg": -83,
+					"min": 31,
+					"sec": 45.28
+				}
+			},
+			"dsmLatLon": {},
+			"utmPos": {}
+		}
+	]
+}
