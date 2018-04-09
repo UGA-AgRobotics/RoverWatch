@@ -23,8 +23,11 @@ var bootstrap = require('bootstrap');
 // Internal modules:
 var gmapHandler = require('./gmap-handler');
 var rosHandler = require('./ros-handler');
-var dataHandler = require('./data-handler');
-var goalsData = require('../../goals/goals1.json');
+// var dataHandler = require('./data-handler');
+
+
+
+var goalsData = require('../../goals/goals1.json');  // load a goals file
 
 
 
@@ -108,7 +111,7 @@ var RoverWatchMain = {
 	  //   // rosHandler.settings.listener.unsubscribe();
 	  // });
 	  rosHandler.topicHandlers.ROS_FIX_TOPIC.subscribe(function(message) {
-	  	console.log("Received message on fixLister: " + message.data);
+	  	console.log("Incoming message from ROS_FIX_TOPIC..");
 	  	RoverWatchMain.handleFixData(message);
 	  });
 
@@ -126,7 +129,7 @@ var RoverWatchMain = {
 		DomElements.currLatTextbox.val(message.latitude);  // Display current lat in textbox
 		DomElements.currLonTextbox.val(message.longitude);  // Display current lon in textbox
 
-		gmapObj.addMarkerToMap(message.latitude, message.longitude, '', rosHandler.gmapObj.pointColorRover);
+		gmapHandler.addMarkerToMap(message.latitude, message.longitude, '', gmapHandler.pointColorRover);
 
 	},
 

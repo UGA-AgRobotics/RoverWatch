@@ -1,10 +1,11 @@
 {
 	"date": "04-05-2018",
 	"location": "Engineering Annex",
+	"units": "dsm",
 	"goals": [
 		{
 			"index": 1,
-			"decLatLon": {
+			"dsmPos": {
 				"lat": {
 					"deg": 31,
 					"min": 28,
@@ -16,12 +17,12 @@
 					"sec": 44.19
 				}
 			},
-			"dsmLatLon": {},
+			"decPos": {},
 			"utmPos": {}
 		},
 		{
 			"index": 2,
-			"decLatLon": {
+			"dsmPos": {
 				"lat": {
 					"deg": 31,
 					"min": 28,
@@ -33,12 +34,12 @@
 					"sec": 44.27
 				}
 			},
-			"dsmLatLon": {},
+			"decPos": {},
 			"utmPos": {}
 		},
 		{
 			"index": 3,
-			"decLatLon": {
+			"dsmPos": {
 				"lat": {
 					"deg": 31,
 					"min": 28,
@@ -50,12 +51,12 @@
 					"sec": 44.38
 				}
 			},
-			"dsmLatLon": {},
+			"decPos": {},
 			"utmPos": {}
 		},
 		{
 			"index": 4,
-			"decLatLon": {
+			"dsmPos": {
 				"lat": {
 					"deg": 31,
 					"min": 28,
@@ -67,12 +68,12 @@
 					"sec": 44.51
 				}
 			},
-			"dsmLatLon": {},
+			"decPos": {},
 			"utmPos": {}
 		},
 		{
 			"index": 5,
-			"decLatLon": {
+			"dsmPos": {
 				"lat": {
 					"deg": 31,
 					"min": 28,
@@ -84,12 +85,12 @@
 					"sec": 44.68
 				}
 			},
-			"dsmLatLon": {},
+			"decPos": {},
 			"utmPos": {}
 		},
 		{
 			"index": 6,
-			"decLatLon": {
+			"dsmPos": {
 				"lat": {
 					"deg": 31,
 					"min": 28,
@@ -101,12 +102,12 @@
 					"sec": 44.79
 				}
 			},
-			"dsmLatLon": {},
+			"decPos": {},
 			"utmPos": {}
 		},
 		{
 			"index": 7,
-			"decLatLon": {
+			"dsmPos": {
 				"lat": {
 					"deg": 31,
 					"min": 28,
@@ -118,12 +119,12 @@
 					"sec": 44.96
 				}
 			},
-			"dsmLatLon": {},
+			"decPos": {},
 			"utmPos": {}
 		},
 		{
 			"index": 8,
-			"decLatLon": {
+			"dsmPos": {
 				"lat": {
 					"deg": 31,
 					"min": 28,
@@ -135,12 +136,12 @@
 					"sec": 45.12
 				}
 			},
-			"dsmLatLon": {},
+			"decPos": {},
 			"utmPos": {}
 		},
 		{
 			"index": 9,
-			"decLatLon": {
+			"dsmPos": {
 				"lat": {
 					"deg": 31,
 					"min": 28,
@@ -152,7 +153,7 @@
 					"sec": 45.28
 				}
 			},
-			"dsmLatLon": {},
+			"decPos": {},
 			"utmPos": {}
 		}
 	]
