@@ -10,40 +10,40 @@ var utmLib = require('utm-latlng');
 
 
 
-var DataHandler = {
+module.exports = function() {
 
-  decLatLon: {
+  var decLatLon = {
     lat: null, 
     lon: null
-  },
+  };
 
-  dsmPos: {
+  var dsmPos = {
     deg: null,
     min: null,
     sec: null
-  },
+  };
 
-  dsmLatLon: {
+  var dsmLatLon = {
     lat: dsmPos,
     lon: dsmPos
-  },
+  };
 
-  utmPos: {
+  var utmPos = {
     easting: null,
     northing: null,
     zoneNumber: null,
     zoneLetter: null
-  },
+  };
 
-  init: function() {
+  function init() {
 
-  },
+  }
 
-  events: function() {
+  function events() {
 
-  },
+  }
 
-  convertDmsToDecimal: function(dsmLatLon) {
+  function convertDmsToDecimal(dsmLatLon) {
     // Input lat/lon format: [degree, minute, second]
     var newPos = DataHandler.decLatLon;
     newPos = {
@@ -51,9 +51,9 @@ var DataHandler = {
         lon: dsmLatLon.lon.deg + dsmLatLon.lon.min/60.0 + dsmLatLon.lon.sec/3600.0;
     }
     return newPos;
-  },
+  }
 
-  convertDecimalToDms: function(decLatLon) {
+  function convertDecimalToDms(decLatLon) {
     // Inputs: lat/lon are single decimal numbers.
     // Returns: [lat,lon], where lat/lon = [deg, min, sec]
     var newPos = DataHandler.dsmLatLon;
@@ -66,16 +66,18 @@ var DataHandler = {
       }
     }
     return newPos;
-  },
+  }
 
-  convertLatLonToUtm: function(lat, lon) {
+  function convertLatLonToUtm(lat, lon) {
     // Converts decimal lat/lon to utm object using utm-latlng npm package.
     // Returns: {Easting: xxxx, Northing: xxxx, ZoneNumber: xxxx, ZoneLetter: xxxx}
     return utmLib.convertLatLngToUtm(lat, lon, 16);  // todo: adjust/confirm precision input
   }
 
-};
+  function fillOutGoalsFile() {
+    // Fill out missing formats of positions in
+    // a goal file. I.e., if a goal.json file has
+    // only decimal lat/lon, add dsm and utm as well. 
+  }
 
-
-
-module.exports = DataHandler;
+}

@@ -24,6 +24,7 @@ var bootstrap = require('bootstrap');
 var gmapHandler = require('./gmap-handler');
 var rosHandler = require('./ros-handler');
 var dataHandler = require('./data-handler');
+var goalsData = require('../../goals/goals1.json');
 
 
 
@@ -146,7 +147,7 @@ var RoverWatchMain = {
 		// Loads a list of goals from a file into the
 		// DOM list of goals.
 		// ++++++++++++++++++++++++++++++++++++++++++++++++++
-
+		
 	}
 
 
