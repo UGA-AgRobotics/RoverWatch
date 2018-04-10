@@ -77,12 +77,26 @@ var RoverWatchMain = {
 		});
 
 		DomElements.uploadGoalsButton.on('change', function() {
-			DomElements.uploadGoalsInfo.html(this.files[0].name);  // add uploaded filename
+
+			var goalsFile = this.files[0];
+			var textType = /json.*/;
+
+			if !(goalsFile.type.match(textType)) {
+				DomElements.uploadGoalsInfo.html("File type not supported.");
+				return;
+			}
+
+			DomElements.uploadGoalsInfo.html(goalsFile.name);  // add uploaded filename
 
 			// Next, call RoverWatch func to load list of goals..
 			// Also call dataHandler to do any data conversions and filling
 			// out any missing formats (e.g., dec, dsm, utm for each goal point):
 			
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				RoverWatchMain.loadGoalsToList(reader.result);
+			}
+			reader.readAsText(file);
 
 		});
 
@@ -106,10 +120,6 @@ var RoverWatchMain = {
 
 	  // ROS Topic Events:
 	  // +++++++++++++++++++++++++++++++++++++
-	  // rosHandler.topicHandlers.ROS_FIX_TOPIC.subscribe(function(message) {
-	  //   console.log('Received message on ' + rosHandler.settings.testListener.name + ': ' + message.data);
-	  //   // rosHandler.settings.listener.unsubscribe();
-	  // });
 	  rosHandler.topicHandlers.ROS_FIX_TOPIC.subscribe(function(message) {
 	  	console.log("Incoming message from ROS_FIX_TOPIC..");
 	  	RoverWatchMain.handleFixData(message);
@@ -145,7 +155,7 @@ var RoverWatchMain = {
 
 
 
-	loadGoalsToList: function() {
+	loadGoalsToList: function(goalsJson) {
 		// ++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Loads a list of goals from a file into the
 		// DOM list of goals.
