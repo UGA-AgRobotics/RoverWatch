@@ -81,7 +81,7 @@ var RoverWatchMain = {
 			var goalsFile = this.files[0];
 			var textType = /json.*/;
 
-			if !(goalsFile.type.match(textType)) {
+			if (!(goalsFile.type.match(textType))) {
 				DomElements.uploadGoalsInfo.html("File type not supported.");
 				return;
 			}
@@ -94,9 +94,10 @@ var RoverWatchMain = {
 			
 			var reader = new FileReader();
 			reader.onload = function (e) {
-				RoverWatchMain.loadGoalsToList(reader.result);
+				var goalsJson = JSON.parse(reader.result);  // expecting json string to convert to object
+				RoverWatchMain.loadGoalsToList(goalsJson);
 			}
-			reader.readAsText(file);
+			reader.readAsText(goalsFile);
 
 		});
 
@@ -160,7 +161,15 @@ var RoverWatchMain = {
 		// Loads a list of goals from a file into the
 		// DOM list of goals.
 		// ++++++++++++++++++++++++++++++++++++++++++++++++++
-		
+		// console.log("Goals data:");
+		// console.log(goalsJson);
+		var goalsToAdd = goalsJson.goals;
+		for (goalInd in goalsToAdd) {
+			var goalObj = goalsToAdd[goalInd];
+			// For now, using dec lat/lon format to add to UI list
+			RoverWatchMain.addGoalToList(goalObj.decPos.lat, goalObj.decPos.lon);  // add lat/lon to UI list of goals
+			gmapHandler.addMarkerToMap(goalObj.decPos.lat, goalObj.decPos.lon, '', gmapHandler.pointColorFlags);
+		}
 	}
 
 
