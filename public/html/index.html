@@ -53,6 +53,16 @@
         <input type="number" placeholder="longitude" id="textbox-goal-lon" value="-83.5289577629">
         <button type="button" class="btn btn-info" id="btn-add-goal">Add goal</button><br><br>
 
+        <!-- Upload a path -->
+        <label><b>Add a path:</b></label><br>
+        <label class="btn btn-info" for="file-upload-path">
+          <input id="file-upload-path" type="file" style="display:none">
+          Upload path
+        </label>
+        <span class='label label-info' id="file-upload-path-info"></span>
+
+        <br><br>
+
         <!-- Upload a list of goals -->
         <label><b>Add list of goals:</b></label><br>
         <label class="btn btn-info" for="file-upload-goals">

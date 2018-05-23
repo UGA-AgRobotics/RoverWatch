@@ -40,7 +40,9 @@ var DomElements = {
 	addGoalButton: $('#btn-add-goal'),
 	goToGoalButton: $('#btn-goto-flag'),
 	uploadGoalsButton: $('#file-upload-goals'),
-	uploadGoalsInfo: $('#file-upload-info')
+	uploadGoalsInfo: $('#file-upload-info'),
+	uploadPathButton: $('#file-upload-path'),
+	uploadPathInfo: $('#file-upload-path-info')
 };
 
 
@@ -98,6 +100,28 @@ var RoverWatchMain = {
 				RoverWatchMain.loadGoalsToList(goalsJson);
 			}
 			reader.readAsText(goalsFile);
+
+		});
+
+
+		DomElements.uploadPathButton.on('change', function() {
+
+			var pathFile = this.files[0];
+			var textType = /json.*/;
+
+			if (!(pathFile.type.match(textType))) {
+				DomElements.uploadPathInfo.html("File type not supported.");
+				return;
+			}
+
+			DomElements.uploadPathInfo.html(pathFile.name);  // add uploaded filename
+
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				var pathJson = JSON.parse(reader.result);  // expecting json string to convert to object
+				RoverWatchMain.loadPathToList(pathJson);
+			}
+			reader.readAsText(pathFile);
 
 		});
 
@@ -169,6 +193,24 @@ var RoverWatchMain = {
 			// For now, using dec lat/lon format to add to UI list
 			RoverWatchMain.addGoalToList(goalObj.decPos.lat, goalObj.decPos.lon);  // add lat/lon to UI list of goals
 			gmapHandler.addMarkerToMap(goalObj.decPos.lat, goalObj.decPos.lon, '', gmapHandler.pointColorFlags);
+		}
+	},
+
+
+
+	loadPathToList: function(courseJson) {
+		/*
+		Loads course data to the google map. Intially, expecting
+		list of {'easting': '', 'northing': ''} objects..
+		*/
+
+		// NOTE: Assuming initial key is topic name of '/fix'..
+
+		var courseData = courseJson['/fix'];  // assuming /fix topic data (see: bag_handler module from simple_navigation_goals)
+
+		for (var courseInd in courseData) {
+			var coursePos = courseData[courseInd];
+			gmapHandler.addMarkerToMap(coursePos.lat, coursePos.lon, '', gmapHandler.pointColorPath)
 		}
 	}
 
