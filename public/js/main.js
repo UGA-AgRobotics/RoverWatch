@@ -97,7 +97,7 @@ var RoverWatchMain = {
 			var reader = new FileReader();
 			reader.onload = function (e) {
 				var goalsJson = JSON.parse(reader.result);  // expecting json string to convert to object
-				RoverWatchMain.loadGoalsToList(goalsJson);
+				RoverWatchMain.loadGoalsToList(goalsJson, 'goal');
 			}
 			reader.readAsText(goalsFile);
 
@@ -119,7 +119,8 @@ var RoverWatchMain = {
 			var reader = new FileReader();
 			reader.onload = function (e) {
 				var pathJson = JSON.parse(reader.result);  // expecting json string to convert to object
-				RoverWatchMain.loadPathToList(pathJson);
+				// RoverWatchMain.loadPathToList(pathJson);
+				RoverWatchMain.loadGoalsToList(pathJson, 'path');
 			}
 			reader.readAsText(pathFile);
 
@@ -180,19 +181,27 @@ var RoverWatchMain = {
 
 
 
-	loadGoalsToList: function(goalsJson) {
+	loadGoalsToList: function(goalsJson, pointType) {
 		// ++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Loads a list of goals from a file into the
 		// DOM list of goals.
 		// ++++++++++++++++++++++++++++++++++++++++++++++++++
-		// console.log("Goals data:");
-		// console.log(goalsJson);
+
+		var pointColor = null;
+		if (pointType == "goal") {
+			pointColor = gmapHandler.pointColorFlags;
+		}
+		else if (pointType == "path") {
+			pointColor = gmapHandler.pointColorPath;
+		}
+
+
 		var goalsToAdd = goalsJson.goals;
 		for (goalInd in goalsToAdd) {
 			var goalObj = goalsToAdd[goalInd];
 			// For now, using dec lat/lon format to add to UI list
 			RoverWatchMain.addGoalToList(goalObj.decPos.lat, goalObj.decPos.lon);  // add lat/lon to UI list of goals
-			gmapHandler.addMarkerToMap(goalObj.decPos.lat, goalObj.decPos.lon, '', gmapHandler.pointColorFlags);
+			gmapHandler.addMarkerToMap(goalObj.decPos.lat, goalObj.decPos.lon, '', pointColor);
 		}
 	},
 
