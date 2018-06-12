@@ -197,11 +197,25 @@ var RoverWatchMain = {
 
 
 		var goalsToAdd = goalsJson.goals;
+
+		if (!(goalsToAdd)) {
+			goalsToAdd = goalsJson.flags;  // fix for goals to flags growing pains..
+		}
+
+
 		for (goalInd in goalsToAdd) {
+
 			var goalObj = goalsToAdd[goalInd];
+
+			// Builds popup HTML for info window when user clicks on a GPS point:
+			var popupInfo = '<div class="content"><p><b>Selected point:</b></p>';
+			popupInfo += '<p>Dec Lat/Lon: ' + goalObj.decPos.lat + ", " + goalObj.decPos.lon + '</p>';
+			popupInfo += '<p>UTM: ' + goalObj.utmPos.easting + ', ' + goalObj.utmPos.northing + '</p>';
+			popupInfo += '</div>';
+
 			// For now, using dec lat/lon format to add to UI list
 			RoverWatchMain.addGoalToList(goalObj.decPos.lat, goalObj.decPos.lon);  // add lat/lon to UI list of goals
-			gmapHandler.addMarkerToMap(goalObj.decPos.lat, goalObj.decPos.lon, '', pointColor);
+			gmapHandler.addMarkerToMap(goalObj.decPos.lat, goalObj.decPos.lon, popupInfo, pointColor, pointType);
 		}
 	},
 
@@ -219,7 +233,7 @@ var RoverWatchMain = {
 
 		for (var courseInd in courseData) {
 			var coursePos = courseData[courseInd];
-			gmapHandler.addMarkerToMap(coursePos.lat, coursePos.lon, '', gmapHandler.pointColorPath)
+			gmapHandler.addMarkerToMap(coursePos.lat, coursePos.lon, "", gmapHandler.pointColorPath);
 		}
 	}
 

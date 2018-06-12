@@ -67,35 +67,51 @@ var GmapHandler = {
 
 	},
 
-	addMarkerToMap: function (lat, lon, htmlMarkupForInfoWindow, pointColor='purple') {
+	addMarkerToMap: function (lat, lon, htmlMarkupForInfoWindow, pointColor='purple', pointType='path') {
 
-		var infowindow = new google.maps.InfoWindow();
-	  var myLatLng = new google.maps.LatLng(lat, lon);
-
-	  // From RRA google_map_dragdrop_geojson.html..
-	  var marker = new google.maps.Circle({
-	    strokeColor: pointColor,
-	    fillColor: pointColor,
-	    map: GmapHandler.map,
-	    center: myLatLng,
-	    radius: 0.1,
-	    animation: google.maps.Animation.DROP  // doesn't seem to work w/ Circle marker
+	  var infoWindow = new google.maps.InfoWindow({
+	  	content: htmlMarkupForInfoWindow
 	  });
+	  var myLatLng = new google.maps.LatLng(lat, lon);
+	  var pointRadius = 0.1;
+
+	  if (pointType=='goal') {
+	  	pointRadius = 0.5;  // uses larger point for flag/goal position on map
+	  } 
+
 	  
 	  //Gives each marker an Id for the on click
 	  GmapHandler.markerCount++;
 
-	  //Creates the event listener for clicking the marker
-	  //and places the marker on the map 
-	  google.maps.event.addListener(marker, 'click', (function(marker, markerCount) {
-	      return function() {
-	          infowindow.setContent(htmlMarkupForInfoWindow);
-	          infowindow.open(GmapHandler.map, marker);
-	      }
-	  })(marker, GmapHandler.markerCount));  
+	  	var posObj = {'latitude': lat, 'longitude': lon};
+
+
+	  	var marker = (function(data) {
+			var latLng = new google.maps.LatLng(data.latitude, data.longitude);
+			var marker = new google.maps.Circle({
+			    strokeColor: pointColor,
+			    fillColor: pointColor,
+			    map: GmapHandler.map,
+			    center: latLng,
+			    radius: pointRadius,
+			    animation: google.maps.Animation.DROP  // doesn't seem to work w/ Circle marker
+			 });
+
+			google.maps.event.addListener(marker, 'click', function(){
+			    infoWindow.setOptions({
+			        position: latLng,
+			        content: htmlMarkupForInfoWindow
+			    });
+			    infoWindow.open(GmapHandler.map, marker);
+			});
+
+			return marker;
+		})(posObj);
+
 	  
 	  //Pans map to the new location of the marker
-	  GmapHandler.map.panTo(myLatLng);      
+	  GmapHandler.map.panTo(myLatLng); 
+   
 
 	}
 
