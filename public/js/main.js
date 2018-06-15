@@ -23,11 +23,6 @@ var bootstrap = require('bootstrap');
 // Internal modules:
 var gmapHandler = require('./gmap-handler');
 var rosHandler = require('./ros-handler');
-// var dataHandler = require('./data-handler');
-
-
-
-var goalsData = require('../../goals/goals1.json');  // load a goals file
 
 
 
