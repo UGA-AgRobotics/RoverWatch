@@ -76,7 +76,7 @@ var GmapHandler = {
 	  var pointRadius = 0.1;
 
 	  if (pointType=='goal') {
-	  	pointRadius = 0.5;  // uses larger point for flag/goal position on map
+	  	pointRadius = 0.2;  // uses larger point for flag/goal position on map
 	  } 
 
 	  
