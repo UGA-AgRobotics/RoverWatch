@@ -206,6 +206,7 @@ var RoverWatchMain = {
 			var popupInfo = '<div class="content"><p><b>Selected point:</b></p>';
 			popupInfo += '<p>Dec Lat/Lon: ' + goalObj.decPos.lat + ", " + goalObj.decPos.lon + '</p>';
 			popupInfo += '<p>UTM: ' + goalObj.utmPos.easting + ', ' + goalObj.utmPos.northing + '</p>';
+			popupInfo += '<p>Time: ' + goalObj.time + '</p>';
 			popupInfo += '</div>';
 
 			// For now, using dec lat/lon format to add to UI list
