@@ -21,7 +21,7 @@ var socketio = require('socket.io-client');
 var RosConfig = {
 
 	// ROS Websocket Server URL:
-	ROS_WEBSOCKET_URL: process.env.ROS_WEBSOCKET_URL || 'ws://192.168.131.11:9090',  // default: Jackal
+	ROS_WEBSOCKET_URL: process.env.ROS_WEBSOCKET_URL || 'ws://192.168.0.188:9090',  // default: Jackal
 
 	ROS_TOPICS: {
 		ROS_FIX_TOPIC: {
