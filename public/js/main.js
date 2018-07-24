@@ -18,7 +18,7 @@ var bootstrap = require('bootstrap');
 // var socketio = require('socket.io-client');
 
 // Configuration:
-// const config = require('../../config');
+const config = require('../../config');
 
 // Internal modules:
 var gmapHandler = require('./gmap-handler');
@@ -92,7 +92,16 @@ var RoverWatchMain = {
 			var reader = new FileReader();
 			reader.onload = function (e) {
 				var goalsJson = JSON.parse(reader.result);  // expecting json string to convert to object
-				RoverWatchMain.loadGoalsToList(goalsJson, 'goal');
+				
+				// Assuming flags file is in geojson format..
+				var flagsObj = RoverWatchMain.getFlagsFromGeojson(goalsJson);
+
+				for (flagInd in flagsObj) {
+					var flag = flagsObj[flagInd];
+					gmapHandler.addMarkerToMap(flag[0], flag[1], "", gmapHandler.pointColorFlags);
+				}
+				// RoverWatchMain.loadGoalsToList(goalsJson, 'goal');
+
 			}
 			reader.readAsText(goalsFile);
 
@@ -114,7 +123,6 @@ var RoverWatchMain = {
 			var reader = new FileReader();
 			reader.onload = function (e) {
 				var pathJson = JSON.parse(reader.result);  // expecting json string to convert to object
-				// RoverWatchMain.loadPathToList(pathJson);
 				RoverWatchMain.loadGoalsToList(pathJson, 'path');
 			}
 			reader.readAsText(pathFile);
@@ -231,6 +239,29 @@ var RoverWatchMain = {
 			var coursePos = courseData[courseInd];
 			gmapHandler.addMarkerToMap(coursePos.lat, coursePos.lon, "", gmapHandler.pointColorPath);
 		}
+	},
+
+
+
+	getFlagsFromGeojson: function(flags_obj) {
+
+		var flags = flags_obj['features']
+		var flags_list = [];
+
+		if(flags.length <= 0) {
+			throw "No flags found in flags file object..";
+		}
+
+		for(flagInd in flags) {
+
+			var flag = flags[flagInd];
+
+			var coords = flag['geometry']['coordinates'];
+
+			flags_list.push([coords[0], coords[1]]);
+		}
+
+		return flags_list;
 	}
 
 

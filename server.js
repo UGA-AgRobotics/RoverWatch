@@ -1,5 +1,6 @@
 // +++++ Configuration: +++++
-var config = require('./config')();
+// var config = require('./config')();
+var config = require('./config');
 
 // +++++ External Packages: +++++
 var express = require('express'); // call express
