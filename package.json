@@ -17,7 +17,7 @@
     "express": "^4.16.2",
     "jquery": "^3.3.1",
     "popper.js": "^1.14.1",
-    "roslib": "^0.20.0",
+    "roslib-fork": "^0.20.1",
     "socket.io": "^2.0.4",
     "utm-latlng": "^1.0.5"
   },
