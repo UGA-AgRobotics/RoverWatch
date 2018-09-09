@@ -54,17 +54,8 @@ var GmapHandler = {
 	},
 
 	setup: function () {
-
 		// jQuery events among other things..
-
 		google.maps.event.addDomListener(window, 'load', GmapHandler.init);  // ?????
-
-		// $('#btn-plot').on('click', function () {
-		// 	let lat = parseFloat($('#textbox-lat').val());  // grabbing val from textbox
-		// 	let lon = parseFloat($('#textbox-lon').val());  // grabbing val from textbox
-  // 		GmapHandler.addMarkerToMap(lat, lon);
-		// });
-
 	},
 
 	addMarkerToMap: function (lat, lon, htmlMarkupForInfoWindow, pointColor='purple', pointType='path') {

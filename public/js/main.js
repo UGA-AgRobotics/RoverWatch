@@ -23,6 +23,7 @@ const config = require('../../config');
 // Internal modules:
 var gmapHandler = require('./gmap-handler');
 var rosHandler = require('./ros-handler');
+var leafletHandler = require('./leaflet-handler');
 
 
 
@@ -46,7 +47,8 @@ var RoverWatchMain = {
 
 	init: function() {
 
-		gmapHandler.init();
+		// gmapHandler.init();
+		leafletHandler.init();
 		rosHandler.init();
 
 		RoverWatchMain.setup();
@@ -69,7 +71,8 @@ var RoverWatchMain = {
 			var lon = DomElements.goalLonTextbox.val();  // get lon value for goal
 			
 			RoverWatchMain.addGoalToList(lat, lon);  // Adds lat/lon from goal lat/lon textboxes to the goals list
-			gmapHandler.addMarkerToMap(lat, lon, '', gmapHandler.pointColorFlags);  // Use Gmap Handler to add lat/lon to map
+			// gmapHandler.addMarkerToMap(lat, lon, '', gmapHandler.pointColorFlags);  // Use Gmap Handler to add lat/lon to map
+			leafletHandler.addMarkerToMap(lat, lon, '', leafletHandler.pointColorFlags);  // Use Leaflet Handler to add lat/lon to map
 
 		});
 
@@ -98,7 +101,8 @@ var RoverWatchMain = {
 
 				for (flagInd in flagsObj) {
 					var flag = flagsObj[flagInd];
-					gmapHandler.addMarkerToMap(flag[0], flag[1], "", gmapHandler.pointColorFlags);
+					// gmapHandler.addMarkerToMap(flag[0], flag[1], "", gmapHandler.pointColorFlags);
+					leafletHandler.addMarkerToMap(flag[0], flag[1], "", leafletHandler.pointColorFlags);
 				}
 				// RoverWatchMain.loadGoalsToList(goalsJson, 'goal');
 
@@ -219,7 +223,8 @@ var RoverWatchMain = {
 
 			// For now, using dec lat/lon format to add to UI list
 			RoverWatchMain.addGoalToList(goalObj.decPos.lat, goalObj.decPos.lon);  // add lat/lon to UI list of goals
-			gmapHandler.addMarkerToMap(goalObj.decPos.lat, goalObj.decPos.lon, popupInfo, pointColor, pointType);
+			// gmapHandler.addMarkerToMap(goalObj.decPos.lat, goalObj.decPos.lon, popupInfo, pointColor, pointType);
+			leafletHandler.addMarkerToMap(goalObj.decPos.lat, goalObj.decPos.lon, popupInfo, pointColor, pointType);
 		}
 	},
 
@@ -237,7 +242,8 @@ var RoverWatchMain = {
 
 		for (var courseInd in courseData) {
 			var coursePos = courseData[courseInd];
-			gmapHandler.addMarkerToMap(coursePos.lat, coursePos.lon, "", gmapHandler.pointColorPath);
+			// gmapHandler.addMarkerToMap(coursePos.lat, coursePos.lon, "", gmapHandler.pointColorPath);
+			leafletHandler.addMarkerToMap(coursePos.lat, coursePos.lon, "", gmapHandler.pointColorPath);
 		}
 	},
 

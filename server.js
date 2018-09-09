@@ -15,6 +15,7 @@ var path = require('path');
 app.use(express.static(path.join(__dirname + '/public/css')));
 app.use(express.static(path.join(__dirname + '/dist')));
 app.use('/css', express.static(path.join(__dirname + '/node_modules/bootstrap/dist/css')));
+app.use('/leaflet', express.static(path.join(__dirname + '/node_modules/leaflet/dist/')));
 
 
 // +++++ Routes: +++++
