@@ -13,11 +13,13 @@ const config = require('../../config');  // import RoverWatch config
 
 // Requirements:
 var $ = require('jquery');
-var roslib = require('roslib');
+var roslib = require('roslib-fork');
 var eventemitter2 = require('eventemitter2');
 var socketio = require('socket.io-client');
 	// gmapHandler = require('./gmap-handler');
 
+console.log("configuration: ");
+console.log(config);
 
 
 var RosConfig = {
@@ -82,13 +84,6 @@ var ROSHandler = {
 	}
 
 };
-
-	
-
-	// return ROSHandler;
-
-
-// };
 
 
 

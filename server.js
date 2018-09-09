@@ -35,5 +35,8 @@ app.get('/', function(req, res) {
 // 	console.log(callback);
 // });
 
+console.log("Current config: ")
+console.log(JSON.stringify(config));
+
 
 console.log('>>> Access page at: http://' + config.NODEJS_HOST + ':' + config.NODEJS_PORT)
