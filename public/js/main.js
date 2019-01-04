@@ -13,9 +13,6 @@ the google maps js api.
 global.jQuery = require('jquery');
 var $ = global.jQuery;
 var bootstrap = require('bootstrap');
-// var roslib = require('roslib');
-// var eventemitter2 = require('eventemitter2');
-// var socketio = require('socket.io-client');
 
 // Configuration:
 const config = require('../../config');
@@ -33,22 +30,33 @@ var DomElements = {
 	goalLatTextbox: $('#textbox-goal-lat'),
 	goalLonTextbox: $('#textbox-goal-lon'),
 	goalList: $('#list-goals'),
-	addGoalButton: $('#btn-add-goal'),
-	goToGoalButton: $('#btn-goto-flag'),
+	addFlagButton: $('#btn-add-flag'),
 	uploadGoalsButton: $('#file-upload-goals'),
 	uploadGoalsInfo: $('#file-upload-info'),
 	uploadPathButton: $('#file-upload-path'),
-	uploadPathInfo: $('#file-upload-path-info')
+	uploadPathInfo: $('#file-upload-path-info'),
+	startDrivingButton: $('#btn-start-driving'),
+	stopDrivingButton: $('#btn-stop-driving'),
+	gpsStatusTextbox: $('#textbox-gps-status'),
+	gpsRatioTextbox: $('#textbox-gps-ratio'),
+	connectionStatusLabel: $('#connection-status'),
+	startRecordingButton: $('#btn-start-recording'),
+	stopRecordingButton: $('#btn-stop-recording')
 };
 
 
 
 var RoverWatchMain = {
 
+	rosConnMessages: {
+		connected: "Status: connected",
+		disconnected: "Status: offline"
+	},
+
 	init: function() {
 
-		// gmapHandler.init();
-		leafletHandler.init();
+		gmapHandler.init();
+		// leafletHandler.init();
 		rosHandler.init();
 
 		RoverWatchMain.setup();
@@ -59,23 +67,24 @@ var RoverWatchMain = {
 
 
 	setup: function() {
-		// Main UI events
+		/*
+		Main UI events
+		*/
 		
-		DomElements.goToGoalButton.on('click', function () {
-			// TODO: When clicked, drive Jackal to the flag's position..
-		});
 
-		DomElements.addGoalButton.on('click', function () {
+		// Add single goal/flag event:
+		DomElements.addFlagButton.on('click', function () {
 
 			var lat = DomElements.goalLatTextbox.val();  // get lat value for goal
 			var lon = DomElements.goalLonTextbox.val();  // get lon value for goal
 			
-			RoverWatchMain.addGoalToList(lat, lon);  // Adds lat/lon from goal lat/lon textboxes to the goals list
-			// gmapHandler.addMarkerToMap(lat, lon, '', gmapHandler.pointColorFlags);  // Use Gmap Handler to add lat/lon to map
-			leafletHandler.addMarkerToMap(lat, lon, '', leafletHandler.pointColorFlags);  // Use Leaflet Handler to add lat/lon to map
+			// RoverWatchMain.addGoalToList(lat, lon);  // Adds lat/lon from goal lat/lon textboxes to the goals list
+			gmapHandler.addMarkerToMap(lat, lon, '', gmapHandler.pointColorFlags);  // Use Gmap Handler to add lat/lon to map
+			// leafletHandler.addMarkerToMap(lat, lon, '', leafletHandler.pointColorFlags);  // Use Leaflet Handler to add lat/lon to map
 
 		});
 
+		// Upload goals/flags event:
 		DomElements.uploadGoalsButton.on('change', function() {
 
 			var goalsFile = this.files[0];
@@ -101,8 +110,8 @@ var RoverWatchMain = {
 
 				for (flagInd in flagsObj) {
 					var flag = flagsObj[flagInd];
-					// gmapHandler.addMarkerToMap(flag[0], flag[1], "", gmapHandler.pointColorFlags);
-					leafletHandler.addMarkerToMap(flag[0], flag[1], "", leafletHandler.pointColorFlags);
+					gmapHandler.addMarkerToMap(flag[0], flag[1], "", gmapHandler.pointColorFlags);
+					// leafletHandler.addMarkerToMap(flag[0], flag[1], "", leafletHandler.pointColorFlags);
 				}
 				// RoverWatchMain.loadGoalsToList(goalsJson, 'goal');
 
@@ -111,7 +120,7 @@ var RoverWatchMain = {
 
 		});
 
-
+		// Upload path event:
 		DomElements.uploadPathButton.on('change', function() {
 
 			var pathFile = this.files[0];
@@ -133,30 +142,62 @@ var RoverWatchMain = {
 
 		});
 
+		// Start recording button event:
+		DomElements.startRecordingButton.on('click', function() {
+			// rosHandler.startRecordingPublisher.publish(true);
+			rosHandler.topicHandlers.ROS_START_RECORDING_TOPIC.publish(rosHandler.rosTrue);
+		});
+
+		// Stop recording button event:
+		DomElements.stopRecordingButton.on('click', function() {
+			// rosHandler.startRecordingPublisher.publish(false);
+			rosHandler.topicHandlers.ROS_START_RECORDING_TOPIC.publish(rosHandler.rosFalse);
+		});
+
+		// Start driving button event:
+		DomElements.startDrivingButton.on('click', function() {
+			rosHandler.startDrivingPublisher.publish(true);
+		});
+
+		// Stop driving button event:
+		DomElements.stopDrivingButton.on('click', function() {
+			rosHandler.startDrivingPublisher.publish(false);
+		});
+
 	},
 
 
 
 	setupRosEvents: function() {
+	  
+		// GPS Fix Topic Subscriber:
+		rosHandler.topicHandlers.ROS_FIX_TOPIC.subscribe(function(message) {
+			console.log("Incoming message from ROS_FIX_TOPIC.");
+			RoverWatchMain.handleFixData(message);
+		});
 
-		// ROS WS Events:
-		// ++++++++++++++++++++++++++
-		rosHandler.rosObj.on('connection', function () {
-			console.log("Connected to websocket server..");
-		}),
-		rosHandler.rosObj.on('error', function (error) {
-	    console.log('Error connecting to websocket server: ', error);
-	  }),
-	  rosHandler.rosObj.on('close', function () {
-	    console.log('Connection to websocket server closed.');
-	  }),
+		// GPS Status Subscriber:
+		rosHandler.topicHandlers.ROS_STATUS_TOPIC.subscribe(function(message) {
+			console.log("Incoming message from ROS_STATUS_TOPIC.");
+			DomElements.gpsStatusTextbox.val(message.data);  // adds gps status to textbox
+		});
 
-	  // ROS Topic Events:
-	  // +++++++++++++++++++++++++++++++++++++
-	  rosHandler.topicHandlers.ROS_FIX_TOPIC.subscribe(function(message) {
-	  	console.log("Incoming message from ROS_FIX_TOPIC..");
-	  	RoverWatchMain.handleFixData(message);
-	  });
+		// GPS AR Validation Ratio Subscriber:
+		rosHandler.topicHandlers.ROS_AR_RATIO_TOPIC.subscribe(function(message) {
+			console.log("Incoming message from ROS_AR_RATIO_TOPIC.");
+			DomElements.gpsRatioTextbox.val(Number(message.data).toFixed(3));  // adds gps ar ratio to textbox
+		});
+
+		// GPS Connected Subscriber:
+		rosHandler.topicHandlers.ROS_GPS_CONNECTED_TOPIC.subscribe(function(message) {
+			console.log("Incoming message from ROS_GPS_CONNECTED_TOPIC.");
+			if (message.data == true) {
+				DomElements.connectionStatusLabel.text(RoverWatchMain.rosConnMessages.connected);
+			}
+			else {
+				DomElements.connectionStatusLabel.text(RoverWatchMain.rosConnMessages.disconnected);
+			}
+		});	  
 
 	},
 
@@ -218,13 +259,15 @@ var RoverWatchMain = {
 			var popupInfo = '<div class="content"><p><b>Selected point:</b></p>';
 			popupInfo += '<p>Dec Lat/Lon: ' + goalObj.decPos.lat + ", " + goalObj.decPos.lon + '</p>';
 			popupInfo += '<p>UTM: ' + goalObj.utmPos.easting + ', ' + goalObj.utmPos.northing + '</p>';
-			popupInfo += '<p>Time: ' + goalObj.time + '</p>';
+			if (goalObj.time) { popupInfo += '<p>Time: ' + goalObj.time + '</p>'; }
+
+			// Adds button to add selected point as flag:
+			popupInfo += $(DomElements.addFlagButton).clone().prop('outerHTML');
 			popupInfo += '</div>';
 
 			// For now, using dec lat/lon format to add to UI list
-			RoverWatchMain.addGoalToList(goalObj.decPos.lat, goalObj.decPos.lon);  // add lat/lon to UI list of goals
-			// gmapHandler.addMarkerToMap(goalObj.decPos.lat, goalObj.decPos.lon, popupInfo, pointColor, pointType);
-			leafletHandler.addMarkerToMap(goalObj.decPos.lat, goalObj.decPos.lon, popupInfo, pointColor, pointType);
+			gmapHandler.addMarkerToMap(goalObj.decPos.lat, goalObj.decPos.lon, popupInfo, pointColor, pointType);
+			// leafletHandler.addMarkerToMap(goalObj.decPos.lat, goalObj.decPos.lon, popupInfo, pointColor, pointType);
 		}
 	},
 
@@ -242,8 +285,8 @@ var RoverWatchMain = {
 
 		for (var courseInd in courseData) {
 			var coursePos = courseData[courseInd];
-			// gmapHandler.addMarkerToMap(coursePos.lat, coursePos.lon, "", gmapHandler.pointColorPath);
-			leafletHandler.addMarkerToMap(coursePos.lat, coursePos.lon, "", gmapHandler.pointColorPath);
+			gmapHandler.addMarkerToMap(coursePos.lat, coursePos.lon, "", gmapHandler.pointColorPath);
+			// leafletHandler.addMarkerToMap(coursePos.lat, coursePos.lon, "", gmapHandler.pointColorPath);
 		}
 	},
 

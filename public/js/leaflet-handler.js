@@ -106,7 +106,8 @@ var LeafletHandler = {
 		geojsonMarkerOptions.fillColor = pointColor;
 
 		// Plots point by creating a leaflet latLng object:
-		L.circle([lat, lon], geojsonMarkerOptions).addTo(LeafletHandler.map);
+		var circle = L.circle([lat, lon], geojsonMarkerOptions).addTo(LeafletHandler.map);
+		circle.bindPopup(htmlMarkupForInfoWindow);
 
 		// // Plots a geojson point:
 		// var geojsonFeature = featureTemplate;

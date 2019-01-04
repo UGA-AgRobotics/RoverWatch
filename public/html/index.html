@@ -5,7 +5,9 @@
   <title>Rover Watch</title>
 
   <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/bootstrap-grid.min.css">
   <link rel="stylesheet" href="styles.css">
+  <!-- <link rel="stylesheet" href="tabs.css"> -->
   <link rel="stylesheet" href="/leaflet/leaflet.css">
   <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
    integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
@@ -33,45 +35,94 @@
       <div class="col-md-6 col-xs-12">
 
         <!-- Current GPS position of Rover -->
-        <label><b>Current position:</b></label><br>
+        <label><b>Current Rover Position:</b></label><br>
         <input type="number" placeholder="latitude" id="textbox-curr-lat" readonly>
         <input type="number" placeholder="longitude" id="textbox-curr-lon" readonly>
 
-        <br><br><br>
-
-        <!-- Adding a flag/goal UI feature -->
-        <label><b>Add single goal position:</b></label><br>
-        <input type="number" placeholder="latitude" id="textbox-goal-lat" value="31.4753776881">
-        <input type="number" placeholder="longitude" id="textbox-goal-lon" value="-83.5289577629">
-        <button type="button" class="btn btn-info" id="btn-add-goal">Add goal</button><br><br>
-
-        <!-- Upload a path -->
-        <label><b>Add a path:</b></label><br>
-        <label class="btn btn-info" for="file-upload-path">
-          <input id="file-upload-path" type="file" style="display:none">
-          Upload path
-        </label>
-        <span class='label label-info' id="file-upload-path-info"></span>
-
         <br><br>
 
-        <!-- Upload a list of goals -->
-        <label><b>Add list of goals:</b></label><br>
-        <label class="btn btn-info" for="file-upload-goals">
-          <input id="file-upload-goals" type="file" style="display:none">
-          Upload goals
-        </label>
-        <span class='label label-info' id="file-upload-info"></span>
+        <!-- GPS Status and AR Validation Ratio -->
+        <label><b>GPS Status:</b></label><br>
+        <input type="text" placeholder="Status" id="textbox-gps-status" readonly>
+        <input type="number" placeholder="AR Validation Ratio" id="textbox-gps-ratio" readonly>
+
+        <br><br><br><br>
+
+
+        <!-- Tab Navigation -->
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#tab1default" data-toggle="tab">Path/Flags</a></li>&nbsp;|&nbsp;
+          <li><a href="#tab2default" data-toggle="tab">Record Path</a></li>&nbsp;|&nbsp;
+          <li><a href="#tab3default" data-toggle="tab">4dAg</a></li>
+        </ul>
+
+        <br>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+
+          <!-- Path/Flags Tab Content -->
+          <div class="tab-pane fade in active" id="tab1default">
+            <div class="row">
+              <!-- Upload a path -->
+              <div class="col-md-6">
+                <label><b>Add path to follow:</b></label><br>
+                <label class="btn btn-info" for="file-upload-path">
+                  <input id="file-upload-path" type="file" style="display:none">
+                  Upload path
+                </label>
+                <span class='label label-info' id="file-upload-path-info"></span>
+              </div>
+              <!-- Upload a list of goals -->
+              <div class="col-md-6">
+                <label><b>Add list of flags:</b></label><br>
+                <label class="btn btn-info" for="file-upload-goals">
+                  <input id="file-upload-goals" type="file" style="display:none">
+                  Upload flags
+                </label>
+                <span class='label label-info' id="file-upload-info"></span>
+              </div>
+            </div>
+            <br><br>
+            <!-- Adding a flag/goal UI feature -->
+            <label><b>Add single flag position:</b></label><br>
+            <input type="number" placeholder="latitude" id="textbox-goal-lat" value="31.4753776881">
+            <input type="number" placeholder="longitude" id="textbox-goal-lon" value="-83.5289577629">
+            <button type="button" class="btn btn-info" id="btn-add-flag">Add flag</button>
+          </div>
+          
+          <!-- Record Path Tab Content -->
+          <div class="tab-pane fade" id="tab2default">
+            <label><b>Record a path for the rover to follow:</b></label><br><br>
+            <!-- Start recording button -->
+            <button type="button" class="btn btn-info" id="btn-start-recording">Start recording</button>
+            <!-- Stop recording button -->
+            <button type="button" class="btn btn-info" id="btn-stop-recording">Stop recording</button>
+            <br>
+            <label id="recording-status"><i>Status: not recording</i></label>
+            <br><br>
+            <!-- Save recording button -->
+            <button type="button" class="btn btn-info" id="btn-save-recording">Save recording</button>
+          </div>
+
+          <!-- 4dAg Tab Content -->
+          <div class="tab-pane fade" id="tab3default">
+            <br><br>
+            <!-- Open 4dAg button -->
+            <button type="button" class="btn btn-info" id="btn-open-4dag">Open 4dAg</button>
+            <br><br>
+          </div>
+          
+        </div>
         
-        <br><br>
+        <br><hr><br><br>
 
-        <label><b>Goals:</b></label>
-        <ul class="list-group" id="list-goals"></ul>
-
-        <br><br>
-
-        <!-- Go to flag button -->
-        <button type="button" class="btn btn-info" id="btn-goto-flag">Go to flag</button>
+        <!-- Start path following button -->
+        <button type="button" class="btn btn-success" id="btn-start-driving">Start path following</button>
+        <!-- Stop path following button -->
+        <button type="button" class="btn btn-danger" id="btn-stop-driving">Stop path following</button><br>
+        <!-- Rover status (offline, driving, stopped, collecting data, etc.) -->
+        <label id="connection-status"><i>Status: offline</i></label>
 
         <br><br>
 
@@ -80,6 +131,7 @@
     </div>
   </div>
 
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
   <script src="bundle.js"></script>
 
 </body>
